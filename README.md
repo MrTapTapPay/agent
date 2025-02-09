@@ -1,4 +1,4 @@
-# MRTAPTAP - A Base Chain Yield Optimization Bot
+# MRTAPTAP - A Base Chain Yield Optimization Bot (powered by Coinbase Agent Kit and Langchain)
 
 ## Overview
 An intelligent Telegram bot that helps users find and execute the best yield strategies on Base blockchain using natural language. The bot abstracts away technical complexities of DeFi interactions, handling everything from token swaps to yield farming across multiple protocols.
@@ -29,6 +29,9 @@ An intelligent Telegram bot that helps users find and execute the best yield str
 - Risk assessment and management
 
 ## Architecture
+
+<img width="1534" alt="Screenshot 2025-02-08 at 6 44 04 PM" src="https://github.com/user-attachments/assets/f492c187-a595-4fed-a4a9-73a2446d9b72" />
+
 
 ### User Flow
 1. User sends natural language request to bot
@@ -114,6 +117,7 @@ I'll notify you if the condition is met and handle the exit automatically."
 - Node.js 16+
 - Telegram Bot API key
 - Base RPC endpoint
+- Coinbase Developer API key
 - LLM API access (OpenAI/Claude)
 
 ### Installation
@@ -132,12 +136,14 @@ cp .env.example .env
 npm run start
 ```
 
+## Note:
+!! Product is still in heavy development phase.
+
+
+
 ### Adding New Protocols
 1. Create new action provider
 2. Define protocol ABIs and addresses
 3. Implement core operations
 4. Add to agent decision tree
 
-
-## Note:
-Product is still in heavy development phase.
