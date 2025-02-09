@@ -1,215 +1,143 @@
-<div align="center">
-  <p>
-    <a href="https://docs.cdp.coinbase.com/agentkit/docs/welcome">
-      <img src="./agentkit_banner.png"/>
-    </a>
-  </p>
-  <h1 style="font-size: 3em; margin-bottom: 20px;">
-    AgentKit
-  </h1>
+# MRTAPTAP - A Base Chain Yield Optimization Bot
 
-  <p>
-    <img src="./agent_k.webp" width="300"/>
-  </p>
+## Overview
+An intelligent Telegram bot that helps users find and execute the best yield strategies on Base blockchain using natural language. The bot abstracts away technical complexities of DeFi interactions, handling everything from token swaps to yield farming across multiple protocols.
 
-  <p style="font-size: 1.2em; max-width: 600px; margin: 0 auto 20px;">
-    Every agent deserves a wallet.
-  </p>
+## Key Features
 
-[![PyPI - Downloads](https://img.shields.io/pypi/dm/cdp-agentkit-core?style=flat-square)](https://pypistats.org/packages/cdp-agentkit-core)
-[![npm downloads](https://img.shields.io/npm/dm/@coinbase/cdp-agentkit-core?style=flat-square)](https://www.npmjs.com/package/@coinbase/agentkit)
-[![GitHub star chart](https://img.shields.io/github/stars/coinbase/cdp-agentkit?style=flat-square)](https://star-history.com/#coinbase/agentkit)
-[![Open Issues](https://img.shields.io/github/issues-raw/coinbase/cdp-agentkit?style=flat-square)](https://github.com/coinbase/agentkit/issues)
+### Natural Language Interface
+- Users interact with the bot using plain English
+- No need to understand complex DeFi terminology
+- Automated handling of underlying technical operations
 
-</div>
+### Multi-Protocol Integration
+1. **Pendle Protocol**
+   - Yield token markets
+   - Market pool interactions
+   - APR comparisons and optimization
 
-## Table of Contents
+2. **Aerodrome**
+   - Router swaps for optimal token pairs
+   - Liquidity pool interactions
+   - Automated path finding for best rates
 
-- [📖 Overview](#-overview)
-- [🚀 Quickstart](#-quickstart)
-  - [Node.js](#nodejs)
-  - [Python](#python)
-- [🗂 Repository Structure](#-repository-structure)
-- [🤝 Contributing](#-contributing)
-- [📜 Documentation](#-documentation)
-- [🚨 Security and bug reports](#-security-and-bug-reports)
-- [📧 Contact](#-contact)
-- [📝 License](#-license)
-- [🔒 Legal and Privacy](#-legal-and-privacy)
+### Automated Operations
+- Token approvals and wrapping (ETH → WETH)
+- Best route calculation for token swaps
+- Pool entry and exit management
+- Yield comparisons and recommendations
+- Risk assessment and management
 
-## 📖 Overview
+## Architecture
 
-AgentKit is [Coinbase Developer Platform's](https://docs.cdp.coinbase.com) framework for easily enabling AI agents to take actions onchain. It is designed to be framework-agnostic, so you can use it with any AI framework, and wallet-agnostic, so you can use it with any wallet. AgentKit is actively being built out, and [welcomes community contributions!](#contributing)
+### User Flow
+1. User sends natural language request to bot
+   ```
+   Example: "I have 1000 USDC and want the best stable yield with low risk"
+   ```
 
-<div align="center">
-  <a href="https://www.youtube.com/watch?v=-R_mKpdepRE">
-    <img src="https://img.youtube.com/vi/-R_mKpdepRE/maxresdefault.jpg" alt="Video Title" style="max-width: 600px;">
-  </a>
-</div>
+2. Bot analyzes request using LLM to:
+   - Identify user's goals
+   - Assess risk tolerance
+   - Determine required actions
 
-## 🚀 Quickstart
+3. Bot executes required operations:
+   - Token swaps if needed (via Aerodrome)
+   - Pool entry/exit (via Pendle)
+   - Position monitoring
 
-### Node.js
+### Technical Components
 
-*Prerequisites*:
-- [Node.js 18+](https://nodejs.org/en/download/)
-- [CDP Secret API Key](https://docs.cdp.coinbase.com/get-started/docs/cdp-api-keys#creating-secret-api-keys)
-- [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
+#### 1. Agent System
+- Central coordinator for all operations
+- Uses AgentKit for structured actions
+- Manages multi-step operations
+- Handles error recovery and retries
 
-1. Get your agent running:
+#### 2. Action Providers
+```typescript
+// Core providers
+- PendleActionProvider
+  - Yield pool interactions
+  - APR comparisons
+  - Position management
 
+- AerodromeActionProvider
+  - Token swaps
+  - Router operations
+  - Path optimization
+
+- TokenActionProvider
+  - ERC20 operations
+  - WETH wrapping/unwrapping
+```
+
+#### 3. Smart Contract Integration
+Key contracts:
+```
+Pendle:
+- Market Factory: 0x59968008a703dC13E6beaECed644bdCe4ee45d13
+- Router: 0x888888888889758F76e7103c6CbF23ABbF58F946
+- PendleSwap: 0x313e7Ef7d52f5C10aC04ebaa4d33CDc68634c212
+
+Aerodrome:
+- Router contracts for token swaps
+- Pool contracts for liquidity
+```
+
+## User Experience Examples
+
+### Finding Best Yields
+```
+User: "What's the best yield for USDC right now?"
+
+Bot: "I found these options:
+1. Pendle USDC/WETH pool: 13.6% APR (Medium risk)
+2. Aerodrome USDC/DAI pool: 8.2% APR (Low risk)
+Would you like to enter any of these positions?"
+```
+
+### Managing Positions
+```
+User: "I want to exit half of my position if yields drop below 5%"
+
+Bot: "I'll set up monitoring for your position:
+- Current yield: 7.8%
+- Exit trigger: 5%
+- Amount: 50% of position
+I'll notify you if the condition is met and handle the exit automatically."
+```
+
+## Development Setup
+
+### Prerequisites
+- Node.js 16+
+- Telegram Bot API key
+- Base RPC endpoint
+- LLM API access (OpenAI/Claude)
+
+### Installation
 ```bash
-# Clone the repository
-git clone https://github.com/coinbase/agentkit.git
-
-# Navigate to the root of the repo
-cd agentkit
-
 # Install dependencies
 npm install
-
-# Build the packages locally
 npm run build
 
-# Navigate to the langchain-cdp-chatbot example
-cd typescript/examples/langchain-cdp-chatbot
+cd agent/typescript/examples/langchain-mrtaptap-chatbot
 
-# At this point, fill in your CDP API key name, private key, and OpenAI API key in
-# the .env.local file.
-# Then, rename the .env.local file to .env
-mv .env.local .env
+# Configure environment
+cp .env.example .env
+# Add your API keys and endpoints (openai keys, cdp wallet keys)
 
-# Run the chatbot
+# Start the bot
 npm run start
 ```
-2. Select "1. chat mode" and start telling your Agent to do things onchain!
 
-```bash
-Prompt: Fund my wallet with some testnet ETH.
--------------------
-Wallet: ccaf1dbf-3a90-4e52-ad34-89a07aad9e8b on network: base-sepolia with default address: 0xD9b990c7b0079c1c3733D2918Ee50b68f29FCFD5
--------------------
+### Adding New Protocols
+1. Create new action provider
+2. Define protocol ABIs and addresses
+3. Implement core operations
+4. Add to agent decision tree
 
--------------------
-Received eth from the faucet. Transaction: https://sepolia.basescan.org/tx/0x03e82934cd04be5b725927729b517c606f6f744611f0f36e834f21ad742ad7ca
--------------------
-Your wallet has been successfully funded with testnet ETH. You can view the transaction [here](https://sepolia.basescan.org/tx/0x03e82934cd04be5b725927729b517c606f6f744611f0f36e834f21ad742ad7ca).
--------------------
-```
 
-### Python
-
-*Prerequisites*:
-- [Python 3.10+](https://www.python.org/downloads/)
-- [Poetry](https://python-poetry.org/docs/)
-- [CDP Secret API Key](https://docs.cdp.coinbase.com/get-started/docs/cdp-api-keys#creating-secret-api-keys)
-- [OpenAI API Key](https://help.openai.com/en/articles/4936850-where-do-i-find-my-openai-api-key)
-
-1. Get your agent running:
-
-```bash
-# Clone the repository
-git clone https://github.com/coinbase/agentkit.git
-
-# Navigate to the chatbot-python example
-cd agentkit/python/examples/cdp-langchain-chatbot 
-
-# At this point, fill in your CDP API key name, private key, and OpenAI API key in the
-# .env.example file.
-# Then, rename the .env.example file to .env
-mv .env.example .env
-
-# Install dependencies
-poetry install
-
-# Run the chatbot
-make run
-```
-2. Select "1. chat mode" and start telling your Agent to do things onchain!
-
-```bash
-Prompt: Fund my wallet with some testnet ETH.
--------------------
-Wallet: ccaf1dbf-3a90-4e52-ad34-89a07aad9e8b on network: base-sepolia with default address: 0xD9b990c7b0079c1c3733D2918Ee50b68f29FCFD5
--------------------
-
--------------------
-Received eth from the faucet. Transaction: https://sepolia.basescan.org/tx/0x03e82934cd04be5b725927729b517c606f6f744611f0f36e834f21ad742ad7ca
--------------------
-Your wallet has been successfully funded with testnet ETH. You can view the transaction [here](https://sepolia.basescan.org/tx/0x03e82934cd04be5b725927729b517c606f6f744611f0f36e834f21ad742ad7ca).
--------------------
-```
-
-## 🗂 Repository Structure
-
-AgentKit is organized as a monorepo that contains multiple packages.
-
-```
-./
-├── typescript/
-│   ├── agentkit/
-│   ├── framework-extensions/
-│   |   └── langchain/
-│   └── examples/
-│       ├── langchain-cdp-chatbot/
-│       ├── langchain-farcaster-chatbot/
-│       └── langchain-twitter-chatbot/
-├── python/
-│   ├── cdp-agentkit-core/
-│   ├── cdp-langchain/
-│   ├── twitter-langchain/
-│   └── examples/
-│       ├── cdp-langchain-chatbot/
-│       └── twitter-langchain-chatbot/
-```
-
-## 🤝 Contributing
-
-**AgentKit is actively looking for community contributions!**
-
-- To see a list of actions and frameworks we'd love to see open-source contributions for, see [WISHLIST.md](./WISHLIST.md).
-- To understand the process for contributing to AgentKit, see [CONTRIBUTING.md](./CONTRIBUTING.md).
-
-## 📜 Documentation
-
-- [AgentKit Documentation](https://docs.cdp.coinbase.com/agentkit/docs/welcome)
-- Python API References
-  - [AgentKit Core](https://coinbase.github.io/agentkit/cdp-agentkit-core/python/index.html)
-  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/cdp-langchain/python/index.html)
-- Node.js API References
-  - [AgentKit](https://coinbase.github.io/agentkit/agentkit/typescript/index.html)
-  - [AgentKit Langchain Extension](https://coinbase.github.io/agentkit/agentkit-langchain/typescript/index.html)
-
-## 🚨 Security and Bug Reports
-
-The AgentKit team takes security seriously.
-See [SECURITY.md](SECURITY.md) for more information.
-
-## 📧 Contact
-
-For feature requests, feedback, or questions, please reach out to us via the 
-[Coinbase Developer Platform Discord](https://discord.com/channels/1220414409550336183/1304126107876069376).
-
-## 📝 License
-
-AgentKit is licensed under the [Apache-2.0](LICENSE.md) license.
-
-## 🔒 Legal and Privacy
-
-The AgentKit software is novel and experimental, and is therefore provided on an AS-IS basis.
- The software is intended to be used only for the purposes of assisting with designing 
- blockchain transactions and enabling other API integrations using natural language inputs, 
- and is not intended to provide (i) an offer, or solicitation of an offer, to invest in, or to 
- buy or sell, any interests or shares, or to participate in any investment or trading 
- strategy, (ii) accounting, legal, tax advice, investment recommendations or other 
- professional advice or (iii) an official statement of Coinbase. Acts proposed or performed by 
- an agent through AgentKit software are NOT acts of Coinbase. You should consult with a 
- professional advisor before making any decisions based on the information provided by the 
- software. No representation or warranty is made, expressed or implied, with respect to the 
- accuracy, completeness, reliability, security, or suitability of the software or to any 
- information provided in connection with the software. The risk of loss through use of the 
- software can be substantial, and you assume any and all risks of loss and liability. The 
- software may produce output that is inaccurate, incorrect, unpredictable or undesirable, and 
- it is the user's exclusive responsibility to evaluate the output and the use-case and 
- determine whether it is appropriate. The right to use the software is contingent on your 
- agreement to the [CDP Terms of Service](https://www.coinbase.com/legal/developer-platform/terms-of-service) (except to the extent it conflicts with the Apache-2.0 license).
+## Note:
+Product is still in heavy development phase.
