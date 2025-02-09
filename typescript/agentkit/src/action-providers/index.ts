@@ -13,3 +13,5 @@ export * from "./twitter";
 export * from "./wallet";
 export * from "./customActionProvider";
 export * from "./alchemy";
+export * from "./aerodrome";
+export * from "./pendle";
